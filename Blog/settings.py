@@ -79,6 +79,13 @@ WSGI_APPLICATION = 'Blog.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
 
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',
+    }
+}
+
 # DATABASES = {
 #     'default': {
 #         'ENGINE': 'django.db.backends.mysql',
@@ -90,16 +97,16 @@ WSGI_APPLICATION = 'Blog.wsgi.application'
 #     }
 # }
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'railway',
-        'HOST': 'viaduct.proxy.rlwy.net',
-        'PORT' : '58130',
-        'USER' : 'root',
-        'PASSWORD': 'EeDDBGFef1AhG-F4CH2df1Eeff3G4D62'
-    }
-}
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.mysql',
+#         'NAME': 'railway',
+#         'HOST': 'viaduct.proxy.rlwy.net',
+#         'PORT' : '58130',
+#         'USER' : 'root',
+#         'PASSWORD': 'EeDDBGFef1AhG-F4CH2df1Eeff3G4D62'
+#     }
+# }
 
 
 
