@@ -1,0 +1,278 @@
+{% extends "base.html" %} 
+{% load widget_tweaks %} 
+{% block content %} 
+{% load static %}
+<div
+  class="flex flex-col justify-between relative min-h-screen bg-[url({% static 'images/Posts/detail.jpg' %})] bg-cover bg-fixed"
+>
+  <div class="absolute top-0 w-full h-full backdrop-blur-lg"></div>
+  <div class="container mx-auto pt-10 z-30 flex mb-10">
+    <div class="lg:grid lg:grid-cols-[1fr_2fr] lg:w-full lg:h-fit grid-rows-1 gap-x-5 gap-y-3 z-30 w-full grid grid-cols-1">
+      <div
+        id="grid-col-profile"
+        class="relative flex flex-col justify-center items-center bg-[url({% static 'images/Posts/detail.jpg' %})] bg-cover bg-center row-span-2 h-[500px]"
+      >
+        <div class="absolute w-full h-full backdrop-blur-sm"></div>
+        <div class="text-white flex flex-col items-center w-[70%] z-30">
+          <!-- Profile -->
+          <div
+            class="w-[150px] h-[150px] rounded-full border-2 border-sky-600 shadow-lg shadow-gray-200 mb-3"
+          >
+            <img
+              src="{{post.author.profile.image.url}}"
+              width="100"
+              height="100"
+              alt=""
+              class="w-full h-full rounded-full"
+            />
+          </div>
+          <!-- Details -->
+          <div class="flex flex-col items-center justify-center w-full space-y-3">
+            <p class="text-2xl">
+              {{post.author.name|capfirst}}
+              <span class="font-bold text-orange-600 inline-block"
+                >@{{post.author.username}}</span
+              >
+            </p>
+            <p>{{post.date_created|timesince}} Ago</p>
+            {% if user.is_authenticated %} {% if user.id == post.author.id %}
+            <div class="text-xl pt-3 flex justify-around w-full">
+              <a
+                href="{% url 'edit-post' post.id %}"
+                class="bg-purple-700 p-3 rounded-lg text-white hover:bg-purple-500 transition ease-linear delay-75"
+                >Edit Post</a
+              >
+              <a
+                href="{% url 'delete-post' post.id %}"
+                class="bg-purple-700 p-3 rounded-lg text-white hover:bg-purple-500 transition ease-linear delay-75"
+                >Delete Post</a
+              >
+            </div>
+            {% endif %} {% endif %}
+            <button
+              class="bg-purple-700 text-xl text-white p-3 rounded-lg cursor-pointer hover:bg-purple-500 transition ease-linear delay-75"
+              id="comments-btn"
+            >
+              Show Comments
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div id="grid-col-content" class="z-30">
+        <div class="bg-white/[0.5] pt-3 pb-1">
+          <!-- Content -->
+          <div
+            id="title"
+            class="relative mx-5 flex justify-center items-center py-3"
+          >
+            <a
+              href="{% url 'home' %}"
+              class="absolute left-0 hover:text-yellow-500 transition ease-linear delay-75 cursor-pointer"
+            >
+              <i class="fa-solid fa-arrow-left text-4xl"></i>
+            </a>
+            <p class="text-4xl font-semibold">{{post.title}}</p>
+
+            <!-- Likes - Unlikes Handle -->
+            <div>
+              <form
+                action="{% url 'like_post' post.pk %}"
+                method="POST"
+                class="absolute right-0 top-2"
+              >
+                {% csrf_token %} {% if user.is_authenticated %}
+                <button
+                  type="submit"
+                  name="post_id"
+                  value="{{ post.id }}"
+                  class="text-4xl cursor-pointer"
+                >
+                  {% if user in post.likes.all %}
+                  <i
+                    class="fa-solid fa-thumbs-up text-green-500 hover:text-red-500 transition ease-linear delay-75"
+                  ></i>
+                  {% else %}
+                  <i
+                    class="fa-solid fa-thumbs-up hover:text-green-500 transition ease-linear delay-75"
+                  ></i>
+                  {% endif %} {{post.likes.count}}
+                </button>
+                {% else %}
+                <div class="text-4xl">
+                  <i class="fa-solid fa-thumbs-up"></i> {{post.likes.count}}
+                </div>
+                {% endif %}
+              </form>
+            </div>
+          </div>
+          <hr />
+          <div id="content" class="mr-5 text-2xl py-3 px-4">
+            <p>
+              {{post.content}} 
+            </p>
+          </div>
+          <hr />
+          <div class="text-4xl my-7 mx-3 flex items-center justify-between">
+            <p class="mx-10">Comments</p>
+            {% if count == 0 %}
+            <p
+              class="mx-20 bg-violet-50/[0.2] border px-10 py-2 rounded-sm text-red-700 font-bold"
+            >
+              {{count}}
+            </p>
+            {% else %}
+            <p
+              class="mx-20 bg-violet-50/[0.2] border px-10 py-2 rounded-sm text-green-700 font-bold"
+            >
+              {{count}}
+            </p>
+            {% endif %}
+          </div>
+          <hr />
+        </div>
+      </div>
+
+      <div
+        id="grid-col-2-content"
+        class="z-30 bg-white/[0.3] comment-box hidden"
+      >
+        <div
+          class="comments flex items-center justify-between p-5 bg-white/[0.3]"
+        >
+          {% if count > 0 or user.is_authenticated %}
+          <!-- <div class="text-2xl">Comments - {{count}}</div> -->
+          <!-- Logic -->
+          <div class="comment-content flex flex-col gap-5 space-y-5 w-full">
+            {% for comment in comments %}
+            <!-- Comments -->
+            <div class="flex gap-2 text-black items-start">
+              <div class="profile-icon">
+                <img
+                  src="{{comment.user.profile.image.url}}"
+                  class="rounded-full h-[50px] w-[50px]"
+                  alt=""
+                />
+              </div>
+              <div
+                class="profile-content bg-gray-500/[0.3] rounded-t-lg rounded-b-lg px-5 text-xl py-2"
+              >
+                <p class="font-semibold">
+                  {{comment.user.username|capfirst}}
+                  ({{comment.updated_at|timesince}} Ago)
+                </p>
+                <p>{{comment.content}}</p>
+                {% if user.is_authenticated %}
+                <div class="mt-2 mb-1">
+                  <hr />
+                  <div
+                    class="self-center space-x-2 text-xl font-semibold mt-1 flex justify-between w-[70%]"
+                  >
+                    <form
+                      action="{% url 'like_comment' post.id %}"
+                      method="post"
+                    >
+                      {% csrf_token %}
+                      <!-- <p>{{comment.likes.all}}, {{request.user.id}}</p> -->
+                      {% if request.user in comment.likes.all %}
+                      <button
+                        type="submit"
+                        name="comment_id"
+                        value="{{ comment.id }}"
+                      >
+                        <i
+                          class="fa-solid fa-thumbs-up cursor-pointer text-green-500 hover:text-red-500 transition ease-linear delay-75"
+                        ></i>
+                        {{comment.likes.count}}
+                      </button>
+                      {% else %}
+                      <button
+                        type="submit"
+                        name="comment_id"
+                        value="{{ comment.id }}"
+                      >
+                        <i
+                          class="fa-solid fa-thumbs-up cursor-pointer hover:text-green-500 transition ease-linear delay-75"
+                        ></i>
+                        {{comment.likes.count}}
+                      </button>
+                      {% endif %}
+                    </form>
+                    {% if user.id == comment.user.id %}
+                    <a href="{% url 'edit-comment' comment.id %}" class=""
+                      >Edit</a
+                    >
+                    <a href="{% url 'delete-comment' comment.id %}" class=""
+                      >Delete</a
+                    >
+                    {% endif %}
+                  </div>
+                </div>
+                {% else %}
+                <i class="fa-solid fa-thumbs-up cursor-pointer"></i>
+                {{comment.likes.count}} {% endif %}
+              </div>
+            </div>
+            {% endfor %}
+            <!-- Add Comment -->
+            <div class="add-comment flex gap-2 w-full items-center">
+              {% if user.is_authenticated %}
+              <img
+                src="{{user.profile.image.url}}"
+                class="rounded-full h-[50px] w-[50px]"
+                alt=""
+              />
+              <form
+                action="{% url 'create-comment' post.id %}"
+                method="POST"
+                class="grow flex gap-2"
+              >
+                {% csrf_token %} 
+                {% render_field form.content class="block w-full px-2 py-1.5 border border-gray-300 rounded-md text-xl shadow-sm placeholder-gray-400 focus:outline-none focus:border-sky-500 focus:ring-1 focus:ring-sky-500 focus:invalid:border-red-500 focus:invalid:ring-red-500" placeholder="Write a Comment" required="required" %}
+                <input
+                  type="submit"
+                  value="Submit"
+                  class="bg-violet-700 hover:bg-violet-500 transition ease-in-out cursor-pointer rounded-lg mx-1 p-2 text-white"
+                />
+              </form>
+              {% else %}
+              <p class="text-2xl mx-auto">
+                <a
+                  href="{% url 'login' %}"
+                  class="underline text-violet-700 hover:text-violet-500 transition ease-linear delay-75"
+                  >Login</a
+                >
+                To Enter The Comments
+              </p>
+              {% endif %}
+            </div>
+          </div>
+          <!--  -->
+          {% else %}
+          <div class="text-2xl mx-auto">No Comments</div>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %} 
+{% block script %}
+<script>
+  const btn = document.getElementById("comments-btn");
+  const comment_box = document.querySelector(".comment-box")
+  let closeBox = true;
+
+  let comments = {{ comments_js|safe }};
+  console.log(comments, typeof(comments));
+
+  btn && btn.addEventListener('click', function() {
+    comment_box.classList.toggle("hidden");
+    if(closeBox)
+      btn.innerText = "Close Comments";
+    else
+      btn.innerText = "Show Comments";
+    closeBox = !closeBox;
+  })
+</script>
+{% endblock %}

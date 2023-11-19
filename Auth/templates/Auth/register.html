@@ -1,0 +1,62 @@
+{% extends "base.html" %} {% load widget_tweaks %} 
+{% load static %}
+{% block content %}
+<div
+  class="flex items-start min-h-screen justify-center bg-[url({% static 'images/Auth/wallpaper.jpg' %})] bg-cover bg-center relative"
+>
+  <div class="absolute w-full h-full backdrop-blur-lg top-0 left-0"></div>
+
+  <div
+    class="z-10 shadow-xl border-t-2 border-gray-500 shadow-black my-20"
+  >
+    <form
+      action=""
+      method="POST"
+      class="text-white text-xl p-8 gap-2 flex flex-col items-center space-y-5 w-[800px]"
+    >
+      <div class="text-center text-5xl border-b-2 border-white w-full">
+        <h1 class="mb-10">Register Form</h1>
+      </div>
+      {% csrf_token %}
+      <!-- Main Code -->
+      {% if form.errors %}
+        <div>
+            {% for field in form %}
+              {% for error in field.errors %}
+                <p class="font-bold text-red-500">{{ error|escape }}</p>
+              {% endfor %}
+            {% endfor %}
+        </div>
+      {% endif %}
+      
+      <div class="w-[90%]">
+        <i class="fa-solid fa-user"></i>
+        {% render_field form.name class="border-none m-0 outline-none p-5 rounded-lg text-lg w-[90%] text-black" placeholder="Name" %}
+      </div>
+
+      <div class="w-[90%]">
+        <i class="fa-solid fa-user"></i>
+        {% render_field form.username class="border-none m-0 outline-none p-5 rounded-lg text-lg w-[90%] text-black" placeholder="Username" %}
+      </div>
+
+      <div class="w-[90%]">
+        <i class="fa-solid fa-envelope"></i>
+        {% render_field form.email class="border-none m-0 outline-none p-5 rounded-lg text-lg w-[90%] text-black" placeholder="Email" %}
+      </div>
+
+      <div class="w-[90%]">
+        <i class="fa-solid fa-lock"></i>
+        {% render_field form.password1 class="border-none m-0 outline-none p-5 rounded-lg text-lg w-[90%] text-black" placeholder="Password" %}
+      </div>
+
+      <div class="w-[90%]">
+        <i class="fa-solid fa-lock"></i>
+        {% render_field form.password2 class="border-none m-0 outline-none p-5 rounded-lg text-lg w-[90%] text-black" placeholder="Confirm Password" %}
+      </div>
+
+      <input type="submit" value="Submit" class="w-full bg-red-500 text-white rounded-lg text-center p-4 px-10 transition ease-linear hover:cursor-pointer hover:bg-red-400"/>
+      <p class="">Already a User? <a href="{% url 'login' %}" class="underline decoration-solid cursor-pointer">Login Here!</a></p>
+    </form>
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,40 @@
+<!-- class="bg-gray-700 text-white px-10 py-8 flex items-center justify-between cursor-pointer fixed top-0 left-0 z-20 w-full box-border" -->
+{% load static %}
+
+<nav
+  class="z-50 bg-black text-white font-bold px-10 py-2 md:flex md:justify-between md:items-center w-full"
+> 
+  
+  <div class="font-bold ml-10 text-3xl flex items-center">
+    <img src="{% static 'logo/logo.png' %}" class="h-20 object-cover" alt="" />
+    <span>Blog</span>
+  </div>
+  <ul class="flex space-x-14 text-2xl">
+    <li class="hover:text-yellow-500 transition ease-linear delay-150">
+      <a href="{% url 'home' %}">Blog Posts</a>
+    </li>
+  </ul>
+  <ul class="flex items-center space-x-14 text-2xl">
+    {% if request.user.is_authenticated %}
+    <li
+      class="relative text-yellow-500 hover:text-white transition ease-linear delay-150 flex items-center gap-x-3"
+    >
+
+    <a href="{% url 'profile' user.profile.id %}" class="flex items-center">
+      <img src="{{request.user.profile.image.url}}" class="w-[40px] h-[40px] rounded-full mt-1 object-cover" alt="" />
+      <div>{{request.user.username|capfirst}}</div>
+    </a>
+    </li>
+    <li class="hover:text-yellow-500 transition ease-linear delay-150">
+      <a href="{% url 'logout' %}">Logout</a>
+    </li>
+    {% else %}
+    <li class="hover:text-yellow-500 transition ease-linear delay-150">
+      <a href="{% url 'login' %}">Login</a>
+    </li>
+    <li class="hover:text-yellow-500 transition ease-linear delay-150">
+      <a href="{% url 'register' %}">Register</a>
+    </li>
+    {% endif %}
+  </ul>
+</nav>

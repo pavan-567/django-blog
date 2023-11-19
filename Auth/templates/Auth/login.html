@@ -1,0 +1,46 @@
+{% extends "base.html" %} 
+{% block content %}
+{% load static %}
+<div
+  class="flex items-center min-h-screen justify-center bg-[url({% static 'images/Auth/wallpaper.jpg' %})] bg-no-repeat bg-cover bg-center relative"
+>
+  <div class="absolute w-full h-full backdrop-blur-lg top-0 left-0"></div>
+  <div class="z-10 shadow-xl border-t-2 border-gray-500 shadow-black">
+    <form
+      method="POST"
+      class="text-white text-2xl p-10 gap-4 flex flex-col items-center space-y-10 w-[700px] h-auto"
+    >
+      <div class="text-center text-5xl border-b-2 w-full">
+        <p class="mb-10">Login Form</p>
+      </div>
+      {% csrf_token %}
+      
+      <div class="w-[90%]">
+        <i class="fa-solid fa-user"></i>
+        <input
+          type="text"
+          name="email"
+          placeholder="Enter Email"
+          class="border-none m-0 outline-none p-5 rounded-lg text-2xl w-[90%] text-black" 
+        />
+      </div>
+      <div class="w-[90%]">
+        <i class="fa-solid fa-lock"></i>
+        <input
+          type="password"
+          name="password"
+          id=""
+          placeholder="Enter Password"
+          class="border-none m-0 p-5 rounded-lg text-2xl outline-none w-[90%] text-black"
+        />
+      </div>
+      <input
+      type="submit"
+      value="Submit"
+      class="w-full bg-red-500 rounded-lg text-center p-4 px-10 transition ease-linear hover:cursor-pointer hover:bg-red-400"
+      />
+      <p class="">Not a User? <a href="{% url 'register' %}" class="underline decoration-solid cursor-pointer">Register Here!</a></p>
+    </form>
+  </div>
+</div>
+{% endblock %}
