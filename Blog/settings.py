@@ -26,7 +26,6 @@ SECRET_KEY = 'django-insecure-5oz8v1bnrkt0d40!)r%c(k9bt$c%v0w4fna39ucojv$2asn@r6
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-# ALLOWED_HOSTS = ['.vercel.app']
 ALLOWED_HOSTS = ['.vercel.app', '.now.sh', '127.0.0.1', 'localhost']
 
 # Application definition
@@ -80,14 +79,25 @@ WSGI_APPLICATION = 'Blog.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
 
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.mysql',
+#         'NAME': 'blog',
+#         'HOST': '127.0.0.1',
+#         'PORT' : '3306',
+#         'USER' : 'root',
+#         'PASSWORD': 'root'
+#     }
+# }
+
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'blog',
-        'HOST': '127.0.0.1',
-        'PORT' : '3306',
+        'NAME': 'railway',
+        'HOST': 'viaduct.proxy.rlwy.net',
+        'PORT' : '58130',
         'USER' : 'root',
-        'PASSWORD': 'root'
+        'PASSWORD': 'EeDDBGFef1AhG-F4CH2df1Eeff3G4D62'
     }
 }
 
