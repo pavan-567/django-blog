@@ -6,7 +6,7 @@ from django.core.validators import FileExtensionValidator
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete= models.CASCADE, null= True)
     bio = models.TextField()
-    image = models.ImageField(default= 'def_cute.png', upload_to= 'profile', validators= [
+    image = models.ImageField(default= 'def_cute.png', validators= [
         FileExtensionValidator(['png', 'jpg', 'jpeg'])
     ])
     follows = models.ManyToManyField("self", related_name= "followed_by", symmetrical= False, blank= True)
