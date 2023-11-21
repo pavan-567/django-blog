@@ -18,12 +18,18 @@
           {{u_form.email.label_tag}}
           {% render_field u_form.email class="mb-3 mt-1 block w-full px-2 py-3 border border-gray-300 rounded-md text-lg shadow-sm placeholder-gray-400 focus:outline-none focus:border-sky-500 focus:ring-1 focus:ring-sky-500 focus:invalid:border-red-500 focus:invalid:ring-red-500" placeholder="Email" %}
         </div>
+        
+        
+        {% comment %}
         <div class="text-lg">
           <p class="text-lg mb-3">
             {{p_form.image.label_tag}}
           </p>
           {% render_field p_form.image class="file:bg-violet-500 file:transition ease-in-out file:hover:bg-violet-400 file:text-white file:border-none file:px-5 file:py-2 file:font-semibold file:rounded-lg" %}
         </div>
+        {% endcomment %}
+          
+
         <div>
           <p>
             {{p_form.bio.label_tag}}

@@ -21,7 +21,7 @@
     >
 
     <a href="{% url 'profile' user.profile.id %}" class="flex items-center">
-      <img src="{{request.user.profile.image.url}}" class="w-[40px] h-[40px] rounded-full mt-1 object-cover" alt="" />
+      <img src="/media/peakpx.jpg" class="w-[40px] h-[40px] rounded-full mt-1 object-cover me-2" alt="" />
       <div>{{request.user.username|capfirst}}</div>
     </a>
     </li>
